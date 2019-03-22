@@ -87,11 +87,11 @@
         android:layout_marginRight="44dp"
         android:text="Search"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        android:onClick="btnDiscover"/>
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <ListView
-        android:layout_width="384dp"
+        android:id="@+id/lvDevices"
+        android:layout_width="332dp"
         android:layout_height="453dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
@@ -100,7 +100,6 @@
         android:layout_marginRight="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bltBtn"
-        android:id="@+id/lvDevices"/>
+        app:layout_constraintTop_toBottomOf="@+id/bltBtn" />
 
 </android.support.constraint.ConstraintLayout>

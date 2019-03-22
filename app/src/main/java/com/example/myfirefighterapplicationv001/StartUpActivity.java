@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +30,7 @@ public class StartUpActivity extends AppCompatActivity {
     private BroadcastReceiver mBroadcastReceiver3 = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
+            String action = intent.getAction();
             Log.d(TAG, "onReceive: ACTION FOUND.");
 
             if (action.equals(BluetoothDevice.ACTION_FOUND)){
@@ -38,6 +39,55 @@ public class StartUpActivity extends AppCompatActivity {
                 Log.d(TAG, "onReceive: " + device.getName() + ": " + device.getAddress());
                 mDeviceListAdapter = new DeviceListAdapter(context, R.layout.device_adapter_view, mBTDevices);
                 lvNewDevices.setAdapter(mDeviceListAdapter);
+            }
+        }
+    };
+
+    private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            // When discovery finds a device
+            if (action.equals(adapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, adapter.ERROR);
+
+                switch(state){
+                    case BluetoothAdapter.STATE_OFF:
+                        Log.d(TAG, "onReceive: STATE OFF");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING OFF");
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE ON");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING ON");
+                        break;
+                }
+            }
+        }
+    };
+
+    private BroadcastReceiver mBroadcastReceiver2 = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+
+            if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
+                BluetoothDevice mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                //3 cases:
+                //case1: bonded already
+                if (mDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
+                    Log.d(TAG, "BroadcastReceiver: BOND_BONDED.");
+                }
+                //case2: creating a bone
+                if (mDevice.getBondState() == BluetoothDevice.BOND_BONDING) {
+                    Log.d(TAG, "BroadcastReceiver: BOND_BONDING.");
+                }
+                //case3: breaking a bond
+                if (mDevice.getBondState() == BluetoothDevice.BOND_NONE) {
+                    Log.d(TAG, "BroadcastReceiver: BOND_NONE.");
+                }
             }
         }
     };
@@ -52,8 +102,8 @@ public class StartUpActivity extends AppCompatActivity {
         Button conBtn = findViewById(R.id.conBtn);
         Button bltBtn = findViewById(R.id.bltBtn);
         Button testBtn = findViewById(R.id.testBtn);
-
-        lvNewDevices = (ListView) findViewById(R.id.lvDevices);
+        Button searchBtn = findViewById(R.id.search);
+        lvNewDevices = findViewById(R.id.lvDevices);
         mBTDevices = new ArrayList<>();
         //test for viewing paired devices(works now!)
         testBtn.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +122,13 @@ public class StartUpActivity extends AppCompatActivity {
             }
         });
 
+        //IntentFilter discoverDevicesIntent = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        //registerReceiver(mBroadcastReceiver3, discoverDevicesIntent);
+
+        IntentFilter bondFilter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+        registerReceiver(mBroadcastReceiver2, bondFilter);
+
+
         //for turning on the bluetooth(works now!)
         bltBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -79,9 +136,43 @@ public class StartUpActivity extends AppCompatActivity {
                 enableBT();
             }
         });
+        searchBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                btnDiscover();
+            }
+        });
+        lvNewDevices.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                        adapter.cancelDiscovery();
+                        Log.d(TAG, "onItemClick: You Clicked on a device.");
+                        String deviceName = mBTDevices.get(i).getName();
+                        String deviceAddress = mBTDevices.get(i).getAddress();
+
+                        Log.d(TAG, "onItemClick: deviceName = " + deviceName);
+                        Log.d(TAG, "onItemClick: deviceAddress = " + deviceAddress);
+
+                        //create the bond.
+                        //NOTE: Requires API 17+? I think this is JellyBean
+                        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2){
+                            Log.d(TAG, "Trying to pair with " + deviceName);
+                            mBTDevices.get(i).createBond();
+                        }
+                    }
+                }
+        );
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mBroadcastReceiver3);
+    }
+
     public void enableBT(){
-        if(adapter == null){
+        /*if(adapter == null){
             TextView errorMsg = findViewById(R.id.errorMsg);
             errorMsg.setText(getString(R.string.msg));
         }
@@ -94,6 +185,24 @@ public class StartUpActivity extends AppCompatActivity {
             startActivity(enableBTIntent);
             TextView errorMsg = findViewById(R.id.errorMsg);
             errorMsg.setText(getString(R.string.msg3));
+        }*/
+        if(adapter == null){
+            Log.d(TAG, "enableDisableBT: Does not have BT capabilities.");
+        }
+        if(!adapter.isEnabled()){
+            Log.d(TAG, "enableDisableBT: enabling BT.");
+            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBTIntent);
+
+            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            registerReceiver(mBroadcastReceiver1, BTIntent);
+        }
+        if(adapter.isEnabled()){
+            Log.d(TAG, "enableDisableBT: disabling BT.");
+            adapter.disable();
+
+            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            registerReceiver(mBroadcastReceiver1, BTIntent);
         }
     }
 
@@ -111,8 +220,9 @@ public class StartUpActivity extends AppCompatActivity {
         }
     }
 
-    public void btnDiscover(View view) {
-        Log.d(TAG,"looking for devices");
+    public void btnDiscover() {
+        Log.d(TAG, "btnDiscover: Looking for unpaired devices.");
+
         if(adapter.isDiscovering()){
             adapter.cancelDiscovery();
             Log.d(TAG, "btnDiscover: Canceling discovery.");
@@ -143,6 +253,7 @@ public class StartUpActivity extends AppCompatActivity {
             if (permissionCheck != 0) {
 
                 this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
+                Log.d(TAG, "checkBTPermissions: premissions checked. SDK version > LOLLIPOP.");
             }
         }else{
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
