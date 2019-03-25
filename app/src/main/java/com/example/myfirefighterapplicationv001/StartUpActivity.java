@@ -73,6 +73,7 @@ public class StartUpActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
 
+
             if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
                 BluetoothDevice mDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 //3 cases:
@@ -88,6 +89,10 @@ public class StartUpActivity extends AppCompatActivity {
                 if (mDevice.getBondState() == BluetoothDevice.BOND_NONE) {
                     Log.d(TAG, "BroadcastReceiver: BOND_NONE.");
                 }
+            }
+            else
+            {
+                Log.d(TAG,"bond state not changed");
             }
         }
     };
@@ -158,7 +163,18 @@ public class StartUpActivity extends AppCompatActivity {
                         //NOTE: Requires API 17+? I think this is JellyBean
                         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2){
                             Log.d(TAG, "Trying to pair with " + deviceName);
-                            mBTDevices.get(i).createBond();
+                            if(mBTDevices.get(i).createBond())
+                            {
+                                Log.d(TAG,"bonding process successfully started");
+                            }
+                            else {
+                                Log.d(TAG,"bonding will not start");
+                                if(mBTDevices.get(i).getBondState()== BluetoothDevice.BOND_BONDED)
+                                {
+                                    Log.d(TAG,"this devices is already paired");
+                                }
+                            }
+
                         }
                     }
                 }
@@ -169,6 +185,8 @@ public class StartUpActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mBroadcastReceiver3);
+        unregisterReceiver(mBroadcastReceiver2);
+        unregisterReceiver(mBroadcastReceiver1);
     }
 
     public void enableBT(){
