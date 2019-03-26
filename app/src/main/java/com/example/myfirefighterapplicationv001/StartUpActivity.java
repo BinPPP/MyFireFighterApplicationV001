@@ -22,6 +22,8 @@ import java.util.Set;
 
 public class StartUpActivity extends AppCompatActivity {
     BluetoothAdapter adapter;
+    BluetoothDevice mBluetoothDevice;
+    BTconnection mBTconnection;
     public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
     public DeviceListAdapter mDeviceListAdapter;
     ListView lvNewDevices;
@@ -80,6 +82,7 @@ public class StartUpActivity extends AppCompatActivity {
                 //case1: bonded already
                 if (mDevice.getBondState() == BluetoothDevice.BOND_BONDED) {
                     Log.d(TAG, "BroadcastReceiver: BOND_BONDED.");
+                    mBluetoothDevice = mDevice;
                 }
                 //case2: creating a bone
                 if (mDevice.getBondState() == BluetoothDevice.BOND_BONDING) {
@@ -165,13 +168,15 @@ public class StartUpActivity extends AppCompatActivity {
                             Log.d(TAG, "Trying to pair with " + deviceName);
                             if(mBTDevices.get(i).createBond())
                             {
-                                Log.d(TAG,"bonding process successfully started");
+                                Log.d(TAG,"Bonding process successfully started");
                             }
                             else {
-                                Log.d(TAG,"bonding will not start");
+                                Log.d(TAG,"Bonding will not start");
                                 if(mBTDevices.get(i).getBondState()== BluetoothDevice.BOND_BONDED)
                                 {
-                                    Log.d(TAG,"this devices is already paired");
+                                    Log.d(TAG,"This devices is already paired");
+                                    mBluetoothDevice = mBTDevices.get(i);
+                                    mBTconnection = new BTconnection(StartUpActivity.this,adapter);
                                 }
                             }
 
@@ -187,6 +192,10 @@ public class StartUpActivity extends AppCompatActivity {
         unregisterReceiver(mBroadcastReceiver3);
         unregisterReceiver(mBroadcastReceiver2);
         unregisterReceiver(mBroadcastReceiver1);
+    }
+
+    public void startBTconnection(BluetoothDevice device){
+        mBTconnection.startClient(device);
     }
 
     public void enableBT(){
@@ -240,7 +249,8 @@ public class StartUpActivity extends AppCompatActivity {
 
     public void btnDiscover() {
         Log.d(TAG, "btnDiscover: Looking for unpaired devices.");
-
+        lvNewDevices.setAdapter(null);
+        mBTDevices.clear();
         if(adapter.isDiscovering()){
             adapter.cancelDiscovery();
             Log.d(TAG, "btnDiscover: Canceling discovery.");
@@ -277,6 +287,6 @@ public class StartUpActivity extends AppCompatActivity {
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
         }
     }
-    }
+}
 
 /*git enabled*/
