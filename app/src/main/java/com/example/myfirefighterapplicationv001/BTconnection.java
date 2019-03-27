@@ -8,16 +8,19 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 public class BTconnection {
     Context mContext;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
-    private ConnectedTread mConnectedThread;
+    private ConnectedThread mConnectedThread;
     private final String TAG = "BTconnection";
     private final BluetoothAdapter mBlueToothAdapter;
     private static final java.util.UUID MY_UUID
-            = java.util.UUID.fromString("DEADBEEF-0000-0000-0000-000000000000");
+            = java.util.UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     public BTconnection(Context mContext, BluetoothAdapter mBlueToothAdapter) {
         this.mContext = mContext;
@@ -58,7 +61,7 @@ public class BTconnection {
                     // A connection was accepted. Perform work associated with
                     // the connection in a separate thread.
 
-                    //manageMyConnectedSocket(socket);
+                    connected(socket);
                     try {
                         mmServerSocket.close();
                         break;
@@ -93,8 +96,7 @@ public class BTconnection {
 
             try {
                 // Get a BluetoothSocket to connect with the given BluetoothDevice.
-                // MY_UUID is the app's UUID string, also used in the server code.
-                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+                tmp = mmDevice.createInsecureRfcommSocketToServiceRecord(MY_UUID);
             } catch (IOException e) {
                 Log.e(TAG, "Socket's create() method failed", e);
             }
@@ -110,7 +112,7 @@ public class BTconnection {
                 // until it succeeds or throws an exception.
                 mmSocket.connect();
             } catch (IOException connectException) {
-                Log.e(TAG,"Could not connect and an exception was thrown", connectException);
+                Log.e(TAG,"Could not connect and an exception was thrown"+ connectException.getMessage());
                 try {
                     mmSocket.close();
                 } catch (IOException closeException) {
@@ -122,7 +124,7 @@ public class BTconnection {
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
 
-            //manageMyConnectedSocket(mmSocket);
+            connected(mmSocket);
         }
 
         // Closes the client socket and causes the thread to finish.
@@ -135,12 +137,12 @@ public class BTconnection {
         }
     }
 
-    private class ConnectedTread extends Thread{
-        private final BluetoothSocket mmSocket;
+    private void connected(BluetoothSocket mmSocket) {
+        Log.d(TAG, "connected: Starting.");
 
-        public ConnectedTread(BluetoothSocket socket) {
-            this.mmSocket = socket;
-        }
+        // Start the thread to manage the connection and perform transmissions
+        mConnectedThread = new ConnectedThread(mmSocket);
+        mConnectedThread.start();
     }
 
     /**
@@ -170,6 +172,68 @@ public class BTconnection {
         Log.d(TAG, "startClient: Started.");
         mConnectThread = new ConnectThread(device);
         mConnectThread.start();
+    }
+
+    private class ConnectedThread extends Thread {
+        private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
+        private final OutputStream mmOutStream;
+
+        public ConnectedThread(BluetoothSocket socket) {
+            Log.d(TAG, "ConnectedThread: Starting.");
+
+            mmSocket = socket;
+            InputStream tmpIn = null;
+            OutputStream tmpOut = null;
+
+
+            try {
+                tmpIn = mmSocket.getInputStream();
+                tmpOut = mmSocket.getOutputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mmInStream = tmpIn;
+            mmOutStream = tmpOut;
+        }
+
+        public void run(){
+            byte[] buffer = new byte[1024];  // buffer store for the stream
+            String text = "hello world";
+            int bytes; // bytes returned from read()
+            write(text.getBytes());
+            // Keep listening to the InputStream until an exception occurs
+            /*while (true) {
+                // Read from the InputStream
+                try {
+                    bytes = mmInStream.read(buffer);
+                    String incomingMessage = new String(buffer, 0, bytes);
+                    Log.d(TAG, "InputStream: " + incomingMessage);
+                } catch (IOException e) {
+                    Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage() );
+                    break;
+                }
+            }*/
+        }
+
+        //Call this from the main activity to send data to the remote device
+        public void write(byte[] bytes) {
+            String text = new String(bytes, Charset.defaultCharset());
+            Log.d(TAG, "write: Writing to outputstream: " + text);
+            try {
+                mmOutStream.write(bytes);
+            } catch (IOException e) {
+                Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
+            }
+        }
+
+        /* Call this from the main activity to shutdown the connection */
+        public void cancel() {
+            try {
+                mmSocket.close();
+            } catch (IOException e) { }
+        }
     }
 
 }
