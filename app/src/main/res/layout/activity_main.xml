@@ -6,31 +6,104 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/textValue1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:hint="Enter a Number"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ProgressBar
+        android:id="@+id/ringIBUT"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="0"
+        android:progressDrawable="@drawable/ring_progress"
+        app:layout_constraintStart_toStartOf="@+id/seekBarCH4"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarCH4" />
 
-    <EditText
-        android:id="@+id/textValue2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:hint="Enter a Number"
-        android:inputType="number"
+    <ProgressBar
+        android:id="@+id/ringO2"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="0"
+        android:progressDrawable="@drawable/ring_progress"
+        app:layout_constraintStart_toStartOf="@+id/seekBarCH4"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarIBUT" />
+
+    <ProgressBar
+        android:id="@+id/ringCO"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="0"
+        android:progressDrawable="@drawable/ring_progress"
+        app:layout_constraintStart_toStartOf="@+id/seekBarCH4"
+        app:layout_constraintTop_toBottomOf="@+id/seekBarO2" />
+
+    <SeekBar
+        android:id="@+id/seekBarCO"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:max="500"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textValue1" />
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ringCO" />
+
+    <SeekBar
+        android:id="@+id/seekBarO2"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:max="2500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ringO2" />
+
+    <SeekBar
+        android:id="@+id/seekBarIBUT"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:max="2000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ringIBUT" />
+
+    <SeekBar
+        android:id="@+id/seekBarCH4"
+        android:layout_width="240dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:max="1000"
+        android:progress="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ringCH4" />
 
     <Button
         android:id="@+id/setBtn"
@@ -46,151 +119,55 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/valueView4" />
+        app:layout_constraintTop_toBottomOf="@+id/seekBarCO" />
 
     <TextView
-        android:id="@+id/valueView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 1"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textValue4" />
-
-    <TextView
-        android:id="@+id/label1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 1"
+        android:id="@+id/textCH4"
+        android:layout_width="82dp"
+        android:layout_height="33dp"
+        android:text="10%"
         android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/textValue1"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarCH4"
+        app:layout_constraintTop_toTopOf="@+id/ringCH4" />
+
+    <TextView
+        android:id="@+id/textCO"
+        android:layout_width="82dp"
+        android:layout_height="33dp"
+        android:text="10 ppm"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarCO"
+        app:layout_constraintTop_toTopOf="@+id/ringCO" />
+
+    <TextView
+        android:id="@+id/textO2"
+        android:layout_width="82dp"
+        android:layout_height="33dp"
+        android:text="20%"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarO2"
+        app:layout_constraintTop_toTopOf="@+id/ringO2" />
+
+    <TextView
+        android:id="@+id/textIBUT"
+        android:layout_width="82dp"
+        android:layout_height="33dp"
+        android:text="10 ppm"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarIBUT"
+        app:layout_constraintTop_toTopOf="@+id/ringIBUT" />
+
+    <ProgressBar
+        android:id="@+id/ringCH4"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="16dp"
+        android:indeterminate="false"
+        android:max="150"
+        android:progress="0"
+        android:progressDrawable="@drawable/ring_progress"
+        app:layout_constraintStart_toStartOf="@+id/seekBarCH4"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/label2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 2"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/textValue2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label1" />
-
-    <TextView
-        android:id="@+id/label3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 3"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/textValue3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label2" />
-
-    <EditText
-        android:id="@+id/textValue3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:hint="Enter a Number"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textValue2" />
-
-    <EditText
-        android:id="@+id/textValue4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:hint="Enter a Number"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textValue3" />
-
-    <TextView
-        android:id="@+id/label4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 4"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/textValue4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/label3" />
-
-    <TextView
-        android:id="@+id/valueView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 2"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/valueView1" />
-
-    <TextView
-        android:id="@+id/valueView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 3"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/valueView2" />
-
-    <TextView
-        android:id="@+id/valueView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Value 4"
-        android:textSize="48sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/valueView3" />
 </android.support.constraint.ConstraintLayout>

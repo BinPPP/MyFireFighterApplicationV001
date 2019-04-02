@@ -105,9 +105,10 @@ public class StartUpActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_start_up);
+
 
         adapter = BluetoothAdapter.getDefaultAdapter();
-        setContentView(R.layout.activity_start_up);
         Button conBtn = findViewById(R.id.conBtn);
         Button bltBtn = findViewById(R.id.bltBtn);
         Button testBtn = findViewById(R.id.testBtn);
