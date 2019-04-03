@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 float dummy;
                 dummy = (float)progress;
                 dummy = dummy/10;
-                textCH4.setText(""+dummy+"%");
+                textCH4.setText("CH4: "+dummy+"%");
 
             }
 
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringIBUT.setProgress(progress/20);
-                textIBUT.setText(""+progress+" ppm");
+                textIBUT.setText("IBUT: "+progress+" ppm");
             }
 
             @Override
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringO2.setProgress(progress/25);
                 float dummy = (float)progress/100;
-                textO2.setText(""+ dummy + "%");
+                textO2.setText("O2: "+ dummy + "%");
             }
 
             @Override
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringCO.setProgress(progress/5);
-                textCO.setText(""+progress + " ppm");
+                textCO.setText("CO: "+progress + " ppm");
             }
 
             @Override
@@ -140,10 +140,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 writeActivity(mBluetoothSocket);
-                writeInput(mBluetoothSocket, textCH4.getText().toString()+"\n");
-                writeInput(mBluetoothSocket, textIBUT.getText().toString()+"\n");
-                writeInput(mBluetoothSocket, textO2.getText().toString()+"\n");
-                writeInput(mBluetoothSocket, textCO.getText().toString()+"\n");
+                writeInput(mBluetoothSocket, fillString(textCH4.getText().toString(),20));
+                writeInput(mBluetoothSocket, fillString(textIBUT.getText().toString(),20));
+                writeInput(mBluetoothSocket, fillString(textO2.getText().toString(),20));
+                writeInput(mBluetoothSocket, fillString(textCO.getText().toString(),20));
 
             }
         });
@@ -166,6 +166,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
         }
+    }
+    public String fillString(String mString, int i){
+        if(mString.length() >= i)
+        {
+            Log.d(TAG,"this String exceeds the limit of the function, returning original String");
+            return mString;
+        }
+        else {
+            int deficit = i - mString.length();
+            int j;
+            for(j = 0; j < deficit; j++){
+                mString = mString+" ";
+            }
+            return mString;
+        }
+
     }
 
 

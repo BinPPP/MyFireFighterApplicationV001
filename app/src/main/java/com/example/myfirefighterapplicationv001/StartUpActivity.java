@@ -123,7 +123,7 @@ public class StartUpActivity extends AppCompatActivity {
             }
         });
 
-        //go to the pairing activity so that we could pair(not done yet!)
+        //go to the pairing activity so that we could pair
         conBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,20 +201,6 @@ public class StartUpActivity extends AppCompatActivity {
     }
 
     public void enableBT(){
-        /*if(adapter == null){
-            TextView errorMsg = findViewById(R.id.errorMsg);
-            errorMsg.setText(getString(R.string.msg));
-        }
-        else if(adapter.isEnabled()){
-            TextView errorMsg = findViewById(R.id.errorMsg);
-            errorMsg.setText(getString(R.string.msg2));
-        }
-        else if(!adapter.isEnabled()){
-            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enableBTIntent);
-            TextView errorMsg = findViewById(R.id.errorMsg);
-            errorMsg.setText(getString(R.string.msg3));
-        }*/
         if(adapter == null){
             Log.d(TAG, "enableDisableBT: Does not have BT capabilities.");
         }
@@ -242,8 +228,8 @@ public class StartUpActivity extends AppCompatActivity {
             // There are paired devices. Get the name and address of each paired device.
             for (BluetoothDevice device : pairedDevices) {
                 String deviceName = device.getName();
-                TextView name = findViewById(R.id.name);
-                name.setText(deviceName);
+                //TextView name = findViewById(R.id.name);
+                //name.setText(deviceName);
                 String deviceHardwareAddress = device.getAddress(); // MAC address
             }
         }

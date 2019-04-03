@@ -123,36 +123,36 @@
 
     <TextView
         android:id="@+id/textCH4"
-        android:layout_width="82dp"
+        android:layout_width="120dp"
         android:layout_height="33dp"
-        android:text="10%"
+        android:text="CH4: 10%"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/seekBarCH4"
         app:layout_constraintTop_toTopOf="@+id/ringCH4" />
 
     <TextView
         android:id="@+id/textCO"
-        android:layout_width="82dp"
+        android:layout_width="120dp"
         android:layout_height="33dp"
-        android:text="10 ppm"
+        android:text="CO: 10 ppm"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/seekBarCO"
         app:layout_constraintTop_toTopOf="@+id/ringCO" />
 
     <TextView
         android:id="@+id/textO2"
-        android:layout_width="82dp"
+        android:layout_width="120dp"
         android:layout_height="33dp"
-        android:text="20%"
+        android:text="O2: 20%"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/seekBarO2"
         app:layout_constraintTop_toTopOf="@+id/ringO2" />
 
     <TextView
         android:id="@+id/textIBUT"
-        android:layout_width="82dp"
-        android:layout_height="33dp"
-        android:text="10 ppm"
+        android:layout_width="120dp"
+        android:layout_height="55dp"
+        android:text="IBUT: 10 ppm"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/seekBarIBUT"
         app:layout_constraintTop_toTopOf="@+id/ringIBUT" />
