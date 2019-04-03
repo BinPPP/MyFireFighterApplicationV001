@@ -1,6 +1,10 @@
 package com.example.myfirefighterapplicationv001;
 
 import android.bluetooth.BluetoothSocket;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView textIBUT;
     private TextView textO2;
     private TextView textCO;
+    private int yellowColorValue = Color.YELLOW;
+    private int greenColorValue = Color.GREEN;
+    private int redColorValue = Color.RED;
 
 
     @Override
@@ -52,6 +59,20 @@ public class MainActivity extends AppCompatActivity {
         barIBUT = findViewById(R.id.seekBarIBUT);
         barO2 = findViewById(R.id.seekBarO2);
         barCO = findViewById(R.id.seekBarCO);
+        //set up progress drawable so that we may see the alarm level in runtime
+        LayerDrawable layerDrawableCH4 = (LayerDrawable) ringCH4.getProgressDrawable();
+        final Drawable progressDrawableCH4 = layerDrawableCH4.findDrawableByLayerId(android.R.id.progress);
+        progressDrawableCH4.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+        LayerDrawable layerDrawableIBUT = (LayerDrawable) ringIBUT.getProgressDrawable();
+        final Drawable progressDrawableIBUT = layerDrawableIBUT.findDrawableByLayerId(android.R.id.progress);
+        progressDrawableCH4.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+        LayerDrawable layerDrawableO2 = (LayerDrawable) ringO2.getProgressDrawable();
+        final Drawable progressDrawableO2 = layerDrawableO2.findDrawableByLayerId(android.R.id.progress);
+        progressDrawableCH4.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+        LayerDrawable layerDrawableCO = (LayerDrawable) ringCO.getProgressDrawable();
+        final Drawable progressDrawableCO = layerDrawableCO.findDrawableByLayerId(android.R.id.progress);
+        progressDrawableCH4.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+
 
         //drag listener for CH4
         barCH4.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -62,6 +83,15 @@ public class MainActivity extends AppCompatActivity {
                 dummy = (float)progress;
                 dummy = dummy/10;
                 textCH4.setText("CH4: "+dummy+"%");
+                if(dummy >= 10 && dummy < 20){
+                    progressDrawableCH4.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(dummy < 10){
+                    progressDrawableCH4.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(dummy >= 20){
+                    progressDrawableCH4.setColorFilter(redColorValue , PorterDuff.Mode.SRC_IN);
+                }
 
             }
 
@@ -82,6 +112,15 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringIBUT.setProgress(progress/20);
                 textIBUT.setText("IBUT: "+progress+" ppm");
+                if(progress >= 100 && progress < 200){
+                    progressDrawableIBUT.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(progress < 100){
+                    progressDrawableIBUT.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(progress >= 200){
+                    progressDrawableIBUT.setColorFilter(redColorValue , PorterDuff.Mode.SRC_IN);
+                }
             }
 
             @Override
@@ -102,6 +141,15 @@ public class MainActivity extends AppCompatActivity {
                 ringO2.setProgress(progress/25);
                 float dummy = (float)progress/100;
                 textO2.setText("O2: "+ dummy + "%");
+                if(dummy <= 19){
+                    progressDrawableO2.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(dummy < 23 && dummy > 19 ){
+                    progressDrawableO2.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(progress >= 23){
+                    progressDrawableO2.setColorFilter(redColorValue , PorterDuff.Mode.SRC_IN);
+                }
             }
 
             @Override
@@ -121,6 +169,15 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringCO.setProgress(progress/5);
                 textCO.setText("CO: "+progress + " ppm");
+                if(progress >= 20 && progress < 100){
+                    progressDrawableCO.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(progress < 20){
+                    progressDrawableCO.setColorFilter(greenColorValue , PorterDuff.Mode.SRC_IN);
+                }
+                else if(progress >= 100){
+                    progressDrawableCO.setColorFilter(redColorValue , PorterDuff.Mode.SRC_IN);
+                }
             }
 
             @Override
