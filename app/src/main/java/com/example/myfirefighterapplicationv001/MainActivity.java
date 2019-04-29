@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private int yellowColorValue = Color.YELLOW;
     private int greenColorValue = Color.GREEN;
     private int redColorValue = Color.RED;
+    private GasValues mGasValues = new GasValues(0,0,0,0);
 
 
     @Override
@@ -197,10 +198,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 writeActivity(mBluetoothSocket);
-                writeInput(mBluetoothSocket, fillString(textCH4.getText().toString(),20));
-                writeInput(mBluetoothSocket, fillString(textIBUT.getText().toString(),20));
-                writeInput(mBluetoothSocket, fillString(textO2.getText().toString(),20));
-                writeInput(mBluetoothSocket, fillString(textCO.getText().toString(),20));
+
+                writeInputGasValues(mBluetoothSocket, mGasValues);
 
             }
         });
@@ -217,13 +216,26 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
         }
     }
-    public void writeInput(BluetoothSocket socket, String input){
+    public void writeInputString(BluetoothSocket socket, String input){
         try {
             socket.getOutputStream().write(input.getBytes());
         } catch (IOException e) {
             Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
         }
     }
+
+    public void writeInputGasValues(BluetoothSocket socket, GasValues mGasVlaues){
+        try {
+            socket.getOutputStream().write(mGasVlaues.getBytesCH4());
+            socket.getOutputStream().write(mGasVlaues.getBytesIBUT());
+            socket.getOutputStream().write(mGasVlaues.getBytesO2());
+            socket.getOutputStream().write(mGasVlaues.getBytesCO());
+        } catch (IOException e) {
+            Log.e(TAG, "write: Error writing to output stream. " + e.getMessage() );
+        }
+
+    }
+
     public String fillString(String mString, int i){
         if(mString.length() >= i)
         {
@@ -241,5 +253,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void setGasValues(){
 
+        float dummy;
+        dummy = (float)ringCH4.getProgress();
+        dummy = dummy/10;
+        mGasValues.setCH4(dummy);
+        Log.d(TAG,"CH4 is set to " + mGasValues.getCH4());
+        dummy = (float)ringIBUT.getProgress();
+        mGasValues.setIBUT(dummy);
+        Log.d(TAG,"IBUT is set to " + mGasValues.getIBUT());
+        dummy = (float)ringO2.getProgress()/100;
+        mGasValues.setO2(dummy);
+        Log.d(TAG,"O2 is set to " + mGasValues.getO2());
+        dummy = (float)ringCO.getProgress();
+        mGasValues.setCO(dummy);
+        Log.d(TAG,"CO is set to " + mGasValues.getCO());
+
+
+    }
 }

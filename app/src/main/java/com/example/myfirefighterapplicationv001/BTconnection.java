@@ -205,7 +205,7 @@ public class BTconnection {
             int bytes; // bytes returned from read()
             write(text.getBytes());
             // Keep listening to the InputStream until an exception occurs
-            /*while (true) {
+            while (true) {
                 // Read from the InputStream
                 try {
                     bytes = mmInStream.read(buffer);
@@ -215,7 +215,7 @@ public class BTconnection {
                     Log.e(TAG, "write: Error reading Input Stream. " + e.getMessage() );
                     break;
                 }
-            }*/
+            }
         }
 
         //Call this from the main activity to send data to the remote device
