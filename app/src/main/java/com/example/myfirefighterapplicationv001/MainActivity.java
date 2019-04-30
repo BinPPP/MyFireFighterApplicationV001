@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 float dummy;
                 dummy = (float)progress;
                 dummy = dummy/10;
+                mGasValues.setCH4(dummy);
                 textCH4.setText("CH4: "+dummy+"%");
                 if(dummy >= 10 && dummy < 20){
                     progressDrawableCH4.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringIBUT.setProgress(progress/20);
+                mGasValues.setIBUT(progress);
                 textIBUT.setText("IBUT: "+progress+" ppm");
                 if(progress >= 100 && progress < 200){
                     progressDrawableIBUT.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringO2.setProgress(progress/25);
                 float dummy = (float)progress/100;
+                mGasValues.setO2(dummy);
                 textO2.setText("O2: "+ dummy + "%");
                 if(dummy <= 19){
                     progressDrawableO2.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
@@ -169,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 ringCO.setProgress(progress/5);
+                mGasValues.setCO(progress);
                 textCO.setText("CO: "+progress + " ppm");
                 if(progress >= 20 && progress < 100){
                     progressDrawableCO.setColorFilter(yellowColorValue , PorterDuff.Mode.SRC_IN);
@@ -197,9 +201,20 @@ public class MainActivity extends AppCompatActivity {
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(mBluetoothSocket != null){
+                    if(mBluetoothSocket.isConnected()){
                 writeActivity(mBluetoothSocket);
+                writeInputGasValues(mBluetoothSocket, mGasValues);}
+                }
+                Log.d(TAG, "the value for CH4 is sent as" + mGasValues.getCH4());
+                for (byte b : mGasValues.getBytesCH4()) {
+                    //System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
+                    Log.d(TAG,""+ Integer.toBinaryString(b & 255 | 256).substring(1));
+                }
+                Log.d(TAG, "the value for IBUT is sent as" + mGasValues.getIBUT());
+                Log.d(TAG, "the value for O2 is sent as" + mGasValues.getO2());
+                Log.d(TAG, "the value for CO is sent as" + mGasValues.getCO());
 
-                writeInputGasValues(mBluetoothSocket, mGasValues);
 
             }
         });
@@ -253,23 +268,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setGasValues(){
-
-        float dummy;
-        dummy = (float)ringCH4.getProgress();
-        dummy = dummy/10;
-        mGasValues.setCH4(dummy);
-        Log.d(TAG,"CH4 is set to " + mGasValues.getCH4());
-        dummy = (float)ringIBUT.getProgress();
-        mGasValues.setIBUT(dummy);
-        Log.d(TAG,"IBUT is set to " + mGasValues.getIBUT());
-        dummy = (float)ringO2.getProgress()/100;
-        mGasValues.setO2(dummy);
-        Log.d(TAG,"O2 is set to " + mGasValues.getO2());
-        dummy = (float)ringCO.getProgress();
-        mGasValues.setCO(dummy);
-        Log.d(TAG,"CO is set to " + mGasValues.getCO());
-
-
-    }
 }
