@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private BluetoothSocket mBluetoothSocket = SocketHandler.getSocket();
+    private BluetoothSocket mBluetoothSocket = SocketHandler.getInstance().getSocket();
     private SeekBar barCH4;
     private SeekBar barIBUT;
     private SeekBar barO2;
@@ -204,13 +204,20 @@ public class MainActivity extends AppCompatActivity {
                 if(mBluetoothSocket != null){
                     if(mBluetoothSocket.isConnected()){
                 writeActivity(mBluetoothSocket);
-                writeInputGasValues(mBluetoothSocket, mGasValues);}
+                writeInputGasValues(mBluetoothSocket, mGasValues);
+                            try {
+                                SocketHandler.getInstance().getSocket().getOutputStream().flush();
+                            } catch (IOException closeException) {
+                                Log.e(TAG, "Could not flush socket", closeException);
+                            }
+
+                    }
                 }
                 Log.d(TAG, "the value for CH4 is sent as" + mGasValues.getCH4());
                 for (byte b : mGasValues.getBytesCH4()) {
-                    //System.out.println(Integer.toBinaryString(b & 255 | 256).substring(1));
                     Log.d(TAG,""+ Integer.toBinaryString(b & 255 | 256).substring(1));
                 }
+                Log.d(TAG,""+ mGasValues.getBytesCH4());
                 Log.d(TAG, "the value for IBUT is sent as" + mGasValues.getIBUT());
                 Log.d(TAG, "the value for O2 is sent as" + mGasValues.getO2());
                 Log.d(TAG, "the value for CO is sent as" + mGasValues.getCO());

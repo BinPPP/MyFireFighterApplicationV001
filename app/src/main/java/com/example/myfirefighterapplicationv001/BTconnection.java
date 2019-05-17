@@ -101,7 +101,7 @@ public class BTconnection {
                 Log.e(TAG, "Socket's create() method failed", e);
             }
             mmSocket = tmp;
-            SocketHandler.setSocket(mmSocket);
+            SocketHandler.getInstance().setSocket(mmSocket);
         }
 
         public void run() {
@@ -111,11 +111,11 @@ public class BTconnection {
             try {
                 // Connect to the remote device through the socket. This call blocks
                 // until it succeeds or throws an exception.
-                SocketHandler.getSocket().connect();
+                SocketHandler.getInstance().getSocket().connect();
             } catch (IOException connectException) {
                 Log.e(TAG,"Could not connect and an exception was thrown"+ connectException.getMessage());
                 try {
-                    SocketHandler.getSocket().close();
+                    SocketHandler.getInstance().getSocket().close();
                 } catch (IOException closeException) {
                     Log.e(TAG, "Could not close the client socket", closeException);
                 }
@@ -125,13 +125,13 @@ public class BTconnection {
             // The connection attempt succeeded. Perform work associated with
             // the connection in a separate thread.
 
-            connected(SocketHandler.getSocket());
+            connected(SocketHandler.getInstance().getSocket());
         }
 
         // Closes the client socket and causes the thread to finish.
         public void cancel() {
             try {
-                SocketHandler.getSocket().close();
+                SocketHandler.getInstance().getSocket().close();
             } catch (IOException e) {
                 Log.e(TAG, "Could not close the client socket", e);
             }

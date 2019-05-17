@@ -3,7 +3,7 @@ package com.example.myfirefighterapplicationv001;
 import android.bluetooth.BluetoothSocket;
 
 public class SocketHandler {
-    /*static SocketHandler mSocketHandler;
+    static SocketHandler mSocketHandler;
     private SocketHandler(){
 
         //Prevent form the reflection api.
@@ -18,15 +18,15 @@ public class SocketHandler {
         }
 
         return mSocketHandler;
-    }*/
+    }
 
-    private static BluetoothSocket socket;
+    private BluetoothSocket socket;
 
-    public static synchronized BluetoothSocket getSocket(){
+    public synchronized BluetoothSocket getSocket(){
         return socket;
     }
 
-    public static synchronized void setSocket(BluetoothSocket socket){
-        SocketHandler.socket = socket;
+    public synchronized void setSocket(BluetoothSocket socket){
+        this.socket = socket;
     }
 }
